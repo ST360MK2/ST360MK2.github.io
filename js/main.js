@@ -5,9 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 1. Jahr im Footer setzen
   // ---------------------------
   const yearEl = document.getElementById("year");
-  if (yearEl) {
-    yearEl.textContent = new Date().getFullYear();
-  }
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   // ---------------------------
   // 2. Blog-Übersicht Funktionen
@@ -17,7 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const $sort = document.getElementById("sort");
   const $tagBar = document.getElementById("tagBar");
 
-  if ($grid && window.POSTS) {
+  if ($grid) {
+    let POSTS = [];
     const state = { query: "", activeTags: new Set(), sort: "date-desc" };
 
     function formatDate(iso) {
@@ -72,14 +71,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function sortPosts(a, b) {
       switch (state.sort) {
-        case "date-asc":
-          return (a.date || "").localeCompare(b.date || "");
-        case "title-asc":
-          return a.title.localeCompare(b.title, "de");
-        case "title-desc":
-          return b.title.localeCompare(a.title, "de");
-        default:
-          return (b.date || "").localeCompare(a.date || "");
+        case "date-asc": return (a.date || "").localeCompare(b.date || "");
+        case "title-asc": return a.title.localeCompare(b.title, "de");
+        case "title-desc": return b.title.localeCompare(a.title, "de");
+        default: return (b.date || "").localeCompare(a.date || "");
       }
     }
 
@@ -89,34 +84,39 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const items = POSTS.filter(matches).sort(sortPosts);
-      $grid.innerHTML = items
-        .map(
-          (p) => `
-        <article class="card">
-          <a href="${p.href}">
-            <div class="title">${p.title}</div>
-            <div class="meta">${p.date ? formatDate(p.date) : ""}</div>
-            <p class="excerpt">${p.excerpt || ""}</p>
-            <div class="card-tags">${(p.tags || []).map((t) => `<span class="chip">${t}</span>`).join("")}</div>
-          </a>
-        </article>`
-        )
-        .join("");
-
-      if (!items.length) {
-        $grid.innerHTML = `<div class="panel" style="grid-column:1/-1"><em>Keine Treffer. Passe Suche oder Tags an.</em></div>`;
-      }
+      $grid.innerHTML = items.length
+        ? items.map(
+            (p) => `
+          <article class="card">
+            <a href="${p.href}">
+              <div class="title">${p.title}</div>
+              <div class="meta">${p.date ? formatDate(p.date) : ""}</div>
+              <p class="excerpt">${p.excerpt || ""}</p>
+              <div class="card-tags">${(p.tags || []).map((t) => `<span class="chip">${t}</span>`).join("")}</div>
+            </a>
+          </article>`
+          ).join('')
+        : `<div class="panel" style="grid-column:1/-1"><em>Keine Treffer. Passe Suche oder Tags an.</em></div>`;
     }
+
+    // ---------------------------
+    // 3. JSON laden
+    // ---------------------------
+    fetch("/posts/posts.json")
+      .then(res => res.json())
+      .then(data => {
+        POSTS = data;
+        renderTags();
+        render();
+      })
+      .catch(err => console.error("Fehler beim Laden von posts.json:", err));
 
     if ($q) $q.addEventListener("input", (e) => { state.query = e.target.value; render(); });
     if ($sort) $sort.addEventListener("change", (e) => { state.sort = e.target.value; render(); });
-
-    renderTags();
-    render();
   }
 
   // ---------------------------
-  // 3. Optional: Blogpost-spezifische JS
+  // 4. Blogpost-spezifische JS
   // ---------------------------
-  // Beispiel: Lightbox oder Scroll-to-Top könnte hier eingefügt werden.
+  // z.B. Lightbox oder Scroll-to-Top
 });
