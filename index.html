@@ -1,7 +1,162 @@
-<h1>My Blog!</h1>
-<p>This is a paragraph.</p>
-<p>
-<div markdown="1">
-This is a *Markdown* Paragraph.
-</div>
-</p>
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blog-Übersicht</title>
+  <meta name="description" content="Übersichtsseite für Blogbeiträge mit Suche, Tags und Sortierung." />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Blog-Übersicht</h1>
+      <p class="sub">Suche, filtere und öffne deine Beiträge in Unterordnern. Diese Seite ist vollständig statisch und läuft auf jedem Webserver.</p>
+    </header>
+
+    <section class="controls">
+      <div class="search">
+        <label for="q" class="sr-only">Suche</label>
+        <input id="q" type="search" placeholder="Nach Titel, Beschreibung oder Tags suchen…" autocomplete="off" />
+      </div>
+      <div class="sort">
+        <label for="sort" class="sr-only">Sortieren</label>
+        <select id="sort">
+          <option value="date-desc">Neueste zuerst</option>
+          <option value="date-asc">Älteste zuerst</option>
+          <option value="title-asc">Titel A–Z</option>
+          <option value="title-desc">Titel Z–A</option>
+        </select>
+      </div>
+      <div class="tags" id="tagBar" aria-label="Tags"></div>
+    </section>
+
+    <section class="grid" id="grid" aria-live="polite"></section>
+
+    <footer>
+      <p>© <span id="year"></span> – Deine Blog-Übersicht. Anpassbar & offline-fähig.</p>
+    </footer>
+  </div>
+
+  <script>
+    const POSTS = [
+      {
+        title: "Italien Roadtrip 2025",
+        href: "reisen/italien-roadtrip/index.html",
+        date: "2025-08-14",
+        excerpt: "Tipps, Route & Fotos vom Sommer-Roadtrip durch Norditalien.",
+        tags: ["reisen","fotografie","tipps"]
+      },
+      {
+        title: "Schneller Pasta-Guide",
+        href: "rezepte/pasta-guide.html",
+        date: "2025-06-02",
+        excerpt: "Grundrezepte, Saucenbasis und Varianten für jeden Tag.",
+        tags: ["rezepte","küche"]
+      },
+      {
+        title: "HomeLab: NAS aufsetzen",
+        href: "technik/homelab-nas.html",
+        date: "2024-11-10",
+        excerpt: "Ein kompaktes Setup mit ZFS, Backups und Docker.",
+        tags: ["technik","selfhosted","anleitung"]
+      },
+      {
+        title: "Minimalistische Garderobe",
+        href: "leben/minimalismus-garderobe/index.html",
+        date: "2024-04-21",
+        excerpt: "Capsule Wardrobe: Weniger Entscheidungen, mehr Stil.",
+        tags: ["leben","minimalismus"]
+      }
+    ];
+
+    const $grid = document.getElementById('grid');
+    const $q = document.getElementById('q');
+    const $sort = document.getElementById('sort');
+    const $tagBar = document.getElementById('tagBar');
+
+    const state = { query: '', activeTags: new Set(), sort: 'date-desc' };
+
+    function formatDate(iso){
+      return new Date(iso + 'T00:00:00').toLocaleDateString('de-DE', { year:'numeric', month:'short', day:'2-digit' });
+    }
+
+    function uniqueTags(){
+      const all = new Set();
+      POSTS.forEach(p=>p.tags?.forEach(t=>all.add(t)));
+      return Array.from(all).sort((a,b)=>a.localeCompare(b,'de'));
+    }
+
+    function renderTags(){
+      $tagBar.innerHTML = '';
+      const tags = uniqueTags();
+      tags.forEach(t=>{
+        const btn = document.createElement('button');
+        btn.className = 'tag';
+        btn.type = 'button';
+        btn.textContent = t;
+        btn.dataset.tag = t;
+        btn.addEventListener('click', ()=>{
+          if(state.activeTags.has(t)) state.activeTags.delete(t); else state.activeTags.add(t);
+          render();
+        });
+        $tagBar.appendChild(btn);
+      });
+      if(tags.length){
+        const clear = document.createElement('button');
+        clear.className = 'clear-tags';
+        clear.type = 'button';
+        clear.textContent = 'Tags zurücksetzen';
+        clear.addEventListener('click', ()=>{ state.activeTags.clear(); render(); });
+        $tagBar.appendChild(clear);
+      }
+    }
+
+    function matches(post){
+      const q = state.query.trim().toLowerCase();
+      const text = (post.title + ' ' + (post.excerpt||'') + ' ' + (post.tags||[]).join(' ')).toLowerCase();
+      const tagOk = !state.activeTags.size || (post.tags||[]).some(t=>state.activeTags.has(t));
+      const queryOk = !q || text.includes(q);
+      return tagOk && queryOk;
+    }
+
+    function sortPosts(a,b){
+      switch(state.sort){
+        case 'date-asc': return (a.date||'').localeCompare(b.date||'');
+        case 'title-asc': return a.title.localeCompare(b.title, 'de');
+        case 'title-desc': return b.title.localeCompare(a.title, 'de');
+        default: return (b.date||'').localeCompare(a.date||'');
+      }
+    }
+
+    function render(){
+      document.querySelectorAll('.tag').forEach(el=>{
+        el.classList.toggle('active', state.activeTags.has(el.dataset.tag));
+      });
+
+      const items = POSTS.filter(matches).sort(sortPosts);
+      $grid.innerHTML = items.map(p=>`
+        <article class="card">
+          <a href="${p.href}">
+            <div class="title">${p.title}</div>
+            <div class="meta">${p.date ? formatDate(p.date) : ''}</div>
+            <p class="excerpt">${p.excerpt||''}</p>
+            <div class="card-tags">${(p.tags||[]).map(t=>`<span class="chip">${t}</span>`).join('')}</div>
+          </a>
+        </article>
+      `).join('');
+
+      if(!items.length){
+        $grid.innerHTML = `<div class="panel" style="grid-column:1/-1"><em>Keine Treffer. Passe Suche oder Tags an.</em></div>`;
+      }
+    }
+
+    $q.addEventListener('input', e=>{ state.query = e.target.value; render(); });
+    $sort.addEventListener('change', e=>{ state.sort = e.target.value; render(); });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    renderTags();
+    render();
+  </script>
+</body>
+</html>

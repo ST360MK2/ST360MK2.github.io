@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blogpost-Titel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Blogpost-Titel</h1>
+      <p class="meta">Veröffentlicht am 01.09.2025</p>
+    </header>
+
+    <article>
+      <p>Dies ist ein Beispieltext für einen Blogpost. Hier kannst du deine Inhalte einfügen.</p>
+      <img src="beispielbild.jpg" alt="Beispiel">
+      <p>Noch ein Abschnitt mit weiterem Inhalt.</p>
+    </article>
+
+    <nav>
+      <a href="../../index.html">← Zur Übersicht</a>
+      <a href="../anderer-post/index.html">Nächster Post →</a>
+    </nav>
+
+    <footer>
+      <p>© <span id="year"></span> – Dein Blog</p>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
