@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Blogpost-Titel</title>
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="wrap">
@@ -20,8 +20,8 @@
     </article>
 
     <nav>
-      <a href="/index.html">← Zur Übersicht</a>
-      <a href="/anderer-post/index.html">Nächster Post →</a>
+      <a href="../../index.html">← Zur Übersicht</a>
+      <a href="../anderer-post/index.html">Nächster Post →</a>
     </nav>
 
     <footer>
@@ -29,8 +29,8 @@
     </footer>
   </div>
 
-
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
-<script src="/js/main.js"></script>
-
 </html>
