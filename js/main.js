@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const $tagBar = document.getElementById("tagBar");
 
   if ($grid) {
-    let POSTS = [];
+  // Use global POSTS from posts.js
     const state = { query: "", activeTags: new Set(), sort: "date-desc" };
 
     function formatDate(iso) {
@@ -99,20 +99,14 @@ document.addEventListener("DOMContentLoaded", () => {
         : `<div class="panel" style="grid-column:1/-1"><em>Keine Treffer. Passe Suche oder Tags an.</em></div>`;
     }
 
-    // ---------------------------
-    // 3. JSON laden
-    // ---------------------------
-    fetch("/posts/posts.json")
-      .then(res => res.json())
-      .then(data => {
-        POSTS = data;
-        renderTags();
-        render();
-      })
-      .catch(err => console.error("Fehler beim Laden von posts.json:", err));
+  // ---------------------------
+  // 3. POSTS direkt verwenden
+  // ---------------------------
+  renderTags();
+  render();
 
-    if ($q) $q.addEventListener("input", (e) => { state.query = e.target.value; render(); });
-    if ($sort) $sort.addEventListener("change", (e) => { state.sort = e.target.value; render(); });
+  if ($q) $q.addEventListener("input", (e) => { state.query = e.target.value; render(); });
+  if ($sort) $sort.addEventListener("change", (e) => { state.sort = e.target.value; render(); });
   }
 
   // ---------------------------
