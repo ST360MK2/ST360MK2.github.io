@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blogpost-Titel</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Merge vs. Rebase</h1>
+      <p class="meta">Veröffentlicht am 04.09.2025</p>
+    </header>
+
+    <article>
+      <h2>Merge</h2>
+      <p>Ein Merge kombiniert die Änderungen aus zwei Branches und erstellt einen neuen Commit im Ziel-Branch. Der
+        folgende Fall wird auch als <b>3-way-merge</b> bezeichnet, da die letzten Commits der beiden Branches (E, F)
+        sowie der gemeinsame Vorgänger (C) betrachtet werden.</p>
+      <pre>
+        Vor dem Merge:                    Nach dem Merge:
+        main:  A---B---C---E              main:  A---B---C---E---G
+                        \                                 \     /
+        feature:         D---F            feature:         D---F
+      </pre>
+      <p>Aber was wenn die Änderungen in main für meinen feature-branch relevant sind?
+        In diesem Fall kann der feature-branch auf den neuesten Stand gebracht werden, indem die Änderungen aus main
+        integriert werden. Die Commits D, F und H stammen jeweils aus einem Merge-Commit</p>
+      <pre>
+        main:  A---B---C---E-------H
+                        \   \     /
+        feature:         D---F---G
+      </pre>
+      <p>Das Problem ist, dass die Historie nicht linear ist und durch die Merge-Commits zusätzliche Verzweigungen
+        entstehen. Dadurch können Änderungen schwerer nachverfolgt werden. Das ist nicht der Fall wenn die Historie
+        linear ist. Hier kann ein <b>Fast-Forward Merge</b> angewendet werden. Dabei werden die Commits des
+        feature-branch einfach in den main-branch verschoben und der feature-branch wird entfert.</p>
+      <pre>
+        Vor dem Fast-Forward Merge:       Nach dem Fast-Forward Merge:
+        main:  A---B---C                  main:  A---B---C---D---E
+                        \                                 
+        feature:         D---E            feature:         
+      </pre>
+      <p>Ein Fast-Forward Merge ist nur möglich, wenn der feature-branch direkt auf dem main-branch basiert und keine
+        zusätzlichen Commits in der Zwischenzeit gemacht wurden. Um die den feature-branch auf den neuesten Stand zu
+        bringen, kann ein Rebase durchgeführt werden und so der lineare Zeitliche Verlauf gewahrt werden.</p>
+      <h2>Rebase</h2>
+      <p>Ein Rebase verschiebt die gesamte Basis eines Branches auf einen neuen Commit. Dies geschieht, indem die
+        Commits des feature-Branches "abgezweigt" und auf den neuesten Commit des main-Branches "wieder
+        aufgesetzt" werden.</p>
+      <pre>
+        Vor dem Rebase:                   Nach dem Rebase:
+        main:  A---B---C---F              main:  A---B---C---F
+                        \                                     \
+        feature:         D---E            feature:             D'---E'
+      </pre>
+      <p>Es liegt nun wieder eine lineare Historie vor und der feature-branch könnte mit einem Fast-Forward Merge in den
+        main-branch integriert werden.
+        Beachte, dass die Commits D' und E' Kopien der ursprünglichen Commits D und E sind, jedoch mit einer neuen
+        Basis. Die Historie des Feature Branches wurde somit umgeschrieben. Aus diesem Grund gilt das Folgende!</p>
+      <h2>Regel</h2>
+      <p><b>Wende kein rebase auf Branches an, die außerhalb deines lokalen repositories liegen und an denen bereits
+          gearbeitet worden sein könnte.</b></p>
+      <h2>Zusammenfassung</h2>
+      <h3>Wann verwende ich Merge?</h3>
+      <p>Du möchtest einen allein oder mit der community genutzten Branch in einen anderen community-branch integrieren.
+        Hierbei sollte Merge verwendet werden, um die Historie beider Branches zu erhalten.</p>
+      <h3>Wann verwende ich Rebase?</h3>
+      <p>Du möchtest einen allein genutzten Branch auf den neuesten Stand des community-branch bringen, ohne die
+        Historie zu verkomplizieren. Hierbei sollte Rebase verwendet werden, um eine lineare Historie zu gewährleisten.
+      </p>
+    </article>
+
+    <nav>
+      <a href="/index.html">← Zur Übersicht</a>
+      <a href="/anderer-post/index.html">Nächster Post →</a>
+    </nav>
+
+    <footer>
+      <p>© <span id="year"></span> – Dein Blog</p>
+    </footer>
+  </div>
+
+
+</body>
+<script src="/js/main.js"></script>
+
+</html>

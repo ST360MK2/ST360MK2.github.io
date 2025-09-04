@@ -12,5 +12,12 @@ const POSTS = [
     date: "2025-09-02",
     excerpt: "Kurzbeschreibung...",
     tags: ["neu","test","blog","example","post","3xample"]
+  },
+  {
+    title: "Merge vs. Rebase",
+    href: "/posts/Technik/Softwareentwicklung/Git/MergeVsRebase/index.html",
+    date: "2025-09-04",
+    excerpt: "Was ist der Unterschied zwischen Merge und Rebase in Git?",
+    tags: ["Git","Softwareentwicklung"]
   }
 ];
