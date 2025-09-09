@@ -19,5 +19,12 @@ const POSTS = [
     date: "2025-09-04",
     excerpt: "Was ist der Unterschied zwischen Merge und Rebase in Git?",
     tags: ["Git","Softwareentwicklung"]
+  },
+  {
+    title: "Kostenfunktion in Quadratisches Optimierungsproblem überführen",
+    href: "/posts/Technik/Regelungstechnik/ModerPredictiveControl/CostFunctionToQuadraticProgram/index.html",
+    date: "2025-09-04",
+    excerpt: "Wie überführt man eine Kostenfunktion in ein quadratisches Optimierungsproblem?",
+    tags: ["MPC","Regelungstechnik"]
   }
 ];

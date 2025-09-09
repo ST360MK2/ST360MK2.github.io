@@ -1,22 +1,122 @@
 <!doctype html>
 <html lang="de">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Blogpost-Titel</title>
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css"
+    integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous">
+
+  <!-- The loading of KaTeX is deferred to speed up page rendering -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"
+    integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6"
+    crossorigin="anonymous"></script>
+
+  <!-- To automatically render math in text elements, include the auto-render extension: -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"
+    integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
 </head>
+
 <body>
   <div class="wrap">
     <header>
-      <h1>Blogpost-Titel</h1>
+      <h1>Kostenfunktion in quadratisches Optimierungsproblem überführen</h1>
       <p class="meta">Veröffentlicht am 01.09.2025</p>
     </header>
 
     <article>
-      <p>Dies ist ein Beispieltext für einen Blogpost. Hier kannst du deine Inhalte einfügen.</p>
-      <img src="beispielbild.jpg" alt="Beispiel">
-      <p>Noch ein Abschnitt mit weiterem Inhalt.</p>
+      <h1>Problemstellung</h1>
+
+      <p>Es liegt ein lineares zeitinvariantes System
+        $$x_{k+1} = Ax_k + Bu_k$$
+        vor, das mit dem Zustandsvektor \(x_k \in \mathbb{R}^n \) und dem Eingangsvektor \(u_k \in \mathbb{R}^m \) beschrieben wird.
+        Die Kostenfunktion für eine Schrittweite des Vorhersagehorizonts \(N\) ist gegeben durch
+        $$\mathscr{l}(x, u) = \frac{1}{2}(x-r_k)^\top Q(x-r_k) + \frac{1}{2}u^\top Ru.$$
+        </p>
+        <h2>Ziel</h2> 
+        <p>
+        Das Ziel ist die Umformung der Kostenfunktion in die Form eines quadratischen Optimierungsproblems
+        $$\min_U \frac{1}{2}U^\top H U + f^\top U$$
+        mit linearen Nebenbedingungen:
+        $$L_b \leq AX \leq U_b.$$
+      </p>
+      <h1>Umformung der Kostenfunktion</h1>
+      <h2>Aufbau der Vorhersagematrizen</h2>
+      <p> Im ersten Schritt werden die Vorhersagematrizen für die Systemzustände x und die Stellgrößen u
+        $$X = 
+        \begin{bmatrix}
+        x_1\\
+        x_2\\
+        \vdots\\
+        x_N
+        \end{bmatrix} \in \mathbb{R}^{N \cdot n},\hspace{2em}U = 
+                \begin{bmatrix}
+        u_1\\
+        u_2\\
+        \vdots\\
+        u_{N-1}
+        \end{bmatrix} \in \mathbb{R}^{N \cdot m}$$
+        in Abhängigkeit der Anzahl der Zustände \(n\), der Eingänge \(m\) und der Anzahl der Schritte im Vorhersagehorizont \(N\) definiert.
+      </p>
+      <p>
+        Mit den Matrizen F und G
+        $$F = 
+        \begin{bmatrix}
+        A\\
+        A^2\\
+        \vdots\\
+        A^N
+        \end{bmatrix}
+        ,\hspace{2em}G = 
+        \begin{bmatrix}
+        B & 0 & \dots & 0 \\
+        AB & B & \dots & 0 \\
+        \vdots & \vdots & \ddots & \vdots \\
+        A^{N-1}B & A^{N-2}B & \dots & B
+        \end{bmatrix}
+        $$
+        können die Systemzustände über den Vorhersagehorizont in Abhängigkeit des Anfangszustands \(x_0\) und der Stellgrößen \(U\) beschrieben werden:
+        $$X = Fx_0 + GU.$$
+      </p>
+      <h2>Umformen der Kostenfunktion</h2>
+      <p>
+        Die Gewichtungsmatrix \(Q\) für die Systemzustände und \(R\) für die Stellgrößen wird über den Vorhersagehorizont zu
+        $$Q=diag(Q, \dots , Q, Q_N) \in \mathbb{R}^{N \cdot n \times N \cdot n},\hspace{2em}R=diag(R, \dots , R, R_{N-1}) \in \mathbb{R}^{N \cdot m \times N \cdot m}$$
+        erweitert. Der Referenzvektor \(r_k\) wird ebenfalls über den Vorhersagehorizont zu
+        $$R_{ref} =
+        \begin{bmatrix}
+        r_1\\
+        r_2\\
+        \vdots\\
+        r_N
+        \end{bmatrix} \in \mathbb{R}^{N \cdot n}
+        $$
+        erweitert.
+        Die Regeldifferenz über den Vorhersagehorizont lässt sich somit als
+        $$E = X-R_{ref} = Fx_0 + GU-R_{ref}$$
+        schreiben. Die Kostenfunktion über den Vorhersagehorizont lautet damit
+        $$J(U) = \frac{1}{2}E^\top Q E + \frac{1}{2}U^\top R U$$
+      </p>
+      <h2>Substituieren und zur QP-Form überführen</h2>
+      <p>
+        Wir definieren \(c = Fx_0 - R_{ref}\) und substituieren in die Kostenfunktion:
+        $$J(U) = \frac{1}{2}(GU+c)^\top Q (GU+c) + \frac{1}{2}U^\top R U.$$
+        Durch Ausmultiplizieren erhalten wir
+        $$J(U) = \frac{1}{2}U^\top (G^\top Q G + R)U + U^\top G^\top Qc + \frac{1}{2}c^\top Q c.$$
+        Da der Term \(c^\top Q c\) konstant ist und damit keinen Einfluss auf die Optimierung hat, kann dieser vernachlässigt werden. Wir fassen die
+        Terme zusammen und erhalten die Form eines quadratischen Optimierungsproblems:
+        $$J(U) = \frac{1}{2}U^\top (G^\top Q G + R) U + (c^\top Q G) U.$$
+        Damit ergeben sich die Matrizen für das quadratische Optimierungsproblem zu
+        $$H = G^\top Q G + R,\hspace{2em}f^\top = c^\top Q G = G^\top Q (Fx_0 - R_{ref}).$$
+        Damit liegt die Kostenfunktion in der gewünschten Form
+        $$\min_U \frac{1}{2}U^\top H U + f^\top U$$
+        vor.
+      </p>
+      <h2>Constraints</h2>
+
     </article>
 
     <nav>
