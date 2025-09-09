@@ -21,6 +21,12 @@ const POSTS = [
     tags: ["Git","Softwareentwicklung"]
   },
   {
+    title: "Test Post",
+    date: "2025-09-09",
+    excerpt: "Wie überführt man eine Kostenfunktion in ein quadratisches Optimierungsproblem?",
+    tags: ["MPC","Regelungstechnik"]
+  },
+  {
     title: "Kostenfunktion in Quadratisches Optimierungsproblem überführen",
     href: "/posts/Technik/Regelungstechnik/ModernPredictiveControl/CostFunctionToQuadraticProgram/index.html",
     date: "2025-09-09",
