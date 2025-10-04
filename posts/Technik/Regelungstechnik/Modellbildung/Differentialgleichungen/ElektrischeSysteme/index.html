@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blog</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css"
+    integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous">
+
+  <!-- The loading of KaTeX is deferred to speed up page rendering -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"
+    integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6"
+    crossorigin="anonymous"></script>
+
+  <!-- To automatically render math in text elements, include the auto-render extension: -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"
+    integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Differentialgleichungen für elektrische Systeme</h1>
+      <p class="meta">Veröffentlicht am 04.10.2025</p>
+    </header>
+
+    <h2>Theorie</h2>
+    <article>
+      <p><h3>1. Kirchhoffsches Gesetz</h3>
+      Die Summe der Ströme an einem Knotenpunkt ist Null.
+      $$\sum_{k=1}^{n} i_k = 0$$
+      <h3>2. Kirchhoffsches Gesetz</h3>
+      Die Summe der Spannungen in einem geschlossenen Stromkreis (Masche) ist Null.
+      $$\sum_{k=1}^{n} u_k = 0$$
+      </p>
+    </article>
+    <h2>Beispiel: RLC-Schaltkreis mit zusätzlichem Widerstand</h2>
+    <article>
+      <p style="background-color: white; display: inline-block; padding: 2px; border-radius: 8px;">
+        <img src="src/RLC_withAdditionalResistor.svg" alt="RLC circuit with additional resistor" height="300"
+          width="400" />
+      </p>
+      <p>
+        <h3>Ziel</h3>
+        Es soll die Differentialgleichung für das gezeigte elektrische System hergeleitet werden. Die Eingangsgröße ist die Spannung \(u_2\) und die Ausgangsgröße die Spannung \(u_1\).
+        <h3>Lösung</h3>
+        Aus dem 2. Kirchhoffschen Gesetzt ergeben sich die folgenden Gleichungen:
+        $$u_1 = L \cdot \dot{i}_1 + u_2 \hspace{1cm} \text{(I)}$$
+        $$u_2 = R_2 \cdot i_3$$
+        $$\dot{u}_2 = R_2 \cdot \dot{i}_3 \hspace{1cm} \text{(II)}$$
+        $$\dot{u}_2 = R_1 \cdot \dot{i}_2 + \dot{u}_C \hspace{1cm} \text{(III)}$$
+        Aus dem 1. Kirchhoffschen Gesetzt ergeben sich die folgenden Gleichungen:
+        $$i_1 = i_2 + i_3$$
+        $$\dot{i}_1 = \dot{i}_2 + \dot{i}_3 \hspace{1cm} \text{(IV)}$$
+        Aus der Kondensatorgleichung folgt:
+        $$\dot{u}_C = \frac{1}{C} \cdot i_2 \hspace{1cm} \text{(V)}$$
+
+        I, II und III in IV:
+        $$\frac{u_1-u_2}{L} = (\dot{u}_2 - \dot{u}_C) \cdot \frac{1}{R_1} + \frac{\dot{u}_2}{R_2}$$
+        $$\frac{u_1-u_2}{L} = \frac{\dot{u}_2}{R_1} - \frac{\dot{u}_C}{R_1} + \frac{\dot{u}_2}{R_2}$$
+        V in die letzte Gleichung eingesetzt:
+        $$\frac{u_1-u_2}{L} = \frac{\dot{u}_2}{R_1} - \frac{i_2}{R_1C} + \frac{\dot{u}_2}{R_2}$$
+        Abgeleitet:
+        $$\frac{\dot{u}_1 - \dot{u}_2}{L} = \frac{\ddot{u}_2}{R_1} - \frac{\dot{i}_2}{R_1C} + \frac{\ddot{u}_2}{R_2} \hspace{1cm} \text{(VI)}$$
+        \(\dot{i}_2\) kann beschrieben werden als:
+        $$\dot{i}_2 = \dot{i}_1 - \dot{i}_3$$
+        $$\dot{i}_2 = \frac{u_1 - u_2}{L} - \frac{\dot{u}_2}{R_2}$$
+        eingesetzt in VI:
+        $$\frac{\dot{u}_1 - \dot{u}_2}{L} = \frac{\ddot{u}_2}{R_1} - \frac{1}{CR_1} \cdot (\frac{u_1 - u_2}{L} - \frac{\ddot{u}_2}{R_2})$$
+        Multipliziert mit \(R_1CL\) ergibt:
+        $$R_1C\dot{u}_1 - R_1C\dot{u}_2 = CL \ddot{u}_2 - u_1 + u_2 + \frac{L}{R_2} \cdot \dot{u}_2 + \frac{LCR_1}{R_2} \cdot \ddot{u}_2$$
+        ergibt in der Standardform:
+        $$LC \cdot (1+\frac{R_1}{R_2}) \cdot \ddot{u}_2 + (R_1C+\frac{L}{R_2}) \cdot \dot{u}_2 + u_2 = u_1 + R_1C \cdot \dot{u}_1$$
+      </p>
+      </article>
+
+      <nav>
+        <a href="/index.html">← Zur Übersicht</a>
+        <a href="/anderer-post/index.html">Nächster Post →</a>
+      </nav>
+
+      <footer>
+        <p>© <span id="year"></span> – Dein Blog</p>
+      </footer>
+  </div>
+
+
+</body>
+<script src="/js/main.js"></script>
+
+</html>
