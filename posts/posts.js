@@ -28,7 +28,7 @@ const POSTS = [
   },
   {
     title: "Kostenfunktion in Quadratisches Optimierungsproblem überführen",
-    href: "/posts/Technik/Regelungstechnik/ModernPredictiveControl/CostFunctionToQuadraticProgram/index.html",
+    href: "/posts/Technik/Regelungstechnik/ModelPredictiveControl/CostFunctionToQuadraticProgram/index.html",
     date: "2025-09-09",
     excerpt: "Wie überführt man eine Kostenfunktion in ein quadratisches Optimierungsproblem?",
     tags: ["MPC","Regelungstechnik"]
@@ -40,11 +40,25 @@ const POSTS = [
     excerpt: "Beschreibung von Regelkreisen im Frequenzbereich mittels Frequenzgang, Ortskurve und Bodediagramm.",
     tags: ["Regelungstechnik"]
   },
-    {
+  {
     title: "Differentialgleichungen für elektrische Systeme",
     href: "/posts/Technik/Regelungstechnik/Modellbildung/Differentialgleichungen/ElektrischeSysteme/index.html",
     date: "2025-10-04",
     excerpt: "Herleitung der Differentialgleichungen für elektrische Systeme am Beispiel eines RLC-Schaltkreises mit zusätzlichem Widerstand.",
     tags: ["Regelungstechnik", "Differentialgleichungen", "Modellbildung", "Elektrische Systeme"]
+  },
+  {
+    title: "Differentialgleichungen für thermodynamische Systeme",
+    href: "/posts/Technik/Regelungstechnik/Modellbildung/Differentialgleichungen/ThermodynamischeSysteme/index.html",
+    date: "2025-10-09",
+    excerpt: "Herleitung der Differentialgleichungen für thermodynamische Systeme.",
+    tags: ["Regelungstechnik", "Differentialgleichungen", "Modellbildung", "Thermodynamische Systeme"]
+  },
+  {
+    title: "Lineare Differentialgleichungen",
+    href: "/posts/Technik/Regelungstechnik/Modellbildung/Differentialgleichungen/LineareDiffernetialgleichungen/index.html",
+    date: "2025-10-09",
+    excerpt: "Beschreibung linearer Differentialgleichungen und deren Standardform.",
+    tags: ["Regelungstechnik", "Differentialgleichungen", "Modellbildung"]
   }
 ];

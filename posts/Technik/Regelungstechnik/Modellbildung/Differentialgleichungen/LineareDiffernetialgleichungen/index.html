@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blogpost-Titel</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css"
+    integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous">
+
+  <!-- The loading of KaTeX is deferred to speed up page rendering -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"
+    integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6"
+    crossorigin="anonymous"></script>
+
+  <!-- To automatically render math in text elements, include the auto-render extension: -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"
+    integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Lineare Differentialgleichungen</h1>
+      <p class="meta">Veröffentlicht am 09.10.2025</p>
+    </header>
+
+    <article>
+      <h2>Standardform</h2>
+      <p>
+        Allgemein haben lineare Differentialgleichungen n-ter Ordnung die Form:
+        $$a_n \frac{d^n y(t)}{dt^n} + a_{n-1} \frac{d^{n-1} y(t)}{dt^{n-1}} + \dots + a_1 \frac{dy(t)}{dt} + a_0 y(t)
+        = b_q \frac{d^q u(t)}{dt^q} + b_{q-1} \frac{d^{q-1} u(t)}{dt^{q-1}} + \dots + b_1 \frac{du(t)}{dt} + b_0 u(t)$$
+        <b>y</b> ist der Systemausgang und <b>u</b> der Systemeingang. Die Koeffizienten \(a_i\) und \(b_i\) sind
+        Konstanten.
+        Häufig wird die Gleichung umgeformt, sodass a_n = 1 ist. Dann ergibt sich die <b>Standardform</b>:
+      </p>
+      <p style="border: 2px solid ; padding: 2px; border-radius: 8px;">
+        $$\frac{d^n y(t)}{dt^n} + a_{n-1} \frac{d^{n-1} y(t)}{dt^{n-1}} + \dots + a_1 \frac{dy(t)}{dt} + a_0 y(t)
+        = b_q \frac{d^q u(t)}{dt^q} + b_{q-1} \frac{d^{q-1} u(t)}{dt^{q-1}} + \dots + b_1 \frac{du(t)}{dt} + b_0 u(t)$$
+      </p>
+      <p>
+        Für technisch realisierbare Systeme muss gelten:
+        $$n-q \geq 0$$
+      </p>
+      <p>
+      <h2>Linearität</h2>
+      Für lineare dynamische Systeme gilt das Superpositionsprinzip. Das bedeutet, dass sich die Wirkung zwei linear
+      überlagerter Eingangssignale am Ausgang in gleicher Weise überlagert. Mathematisch ausgedrückt bedeutet dies:
+      $$u(t) = k \cdot u_1(t) + l \cdot u_2(t) \mapsto y(t) = k \cdot y_1(t) + l \cdot y_2(t)$$
+      Der Pfeil \( \mapsto \) steht für das dynamische System beschrieben durch die Differentialgleichung.
+
+      <h3>Beispiel einer linearen Differentialgleichung</h3>
+      $$2y(t) = 4u(t)$$
+      Umgeformt nach y(t) ergibt sich:
+      $$y(t) = 2u(t)$$
+      Nehmen wir für k=1, l=3, \(u_1(t) = 1\) und \(u_2(t) = 2\) an, so ergibt sich für den Eingang:
+      $$k \cdot u_1(t) + l \cdot u_2(t) = u(t)$$
+      $$1 \cdot 1 + 3 \cdot 2 = 7$$
+      und für den Ausgang:
+      $$k \cdot y_1(t) + l \cdot y_2(t) = y(t)$$
+      $$k \cdot 2u_1(t) + l \cdot 2u_2(t) = 2u(t)$$
+      $$1 \cdot 2 \cdot 1 + 3 \cdot 2 \cdot 2 = 2 \cdot 7$$
+
+      <h3>Beispiel einer nichtlinearen Differentialgleichung</h3>
+      $$\sqrt{y(t)} = u(t)$$
+      Umgeformt nach y(t) ergibt sich:
+      $$y(t) = u(t)^2$$
+      Für den Eingang ergibt sich wieder:
+      $$k \cdot u_1(t) + l \cdot u_2(t) = u(t)$$
+      $$1 \cdot 1 + 3 \cdot 2 = 7$$
+      Für den Ausgang ergibt sich jedoch:
+      $$k \cdot y_1(t) + l \cdot y_2(t) = y(t)$$
+      $$k \cdot u_1(t)^2 + l \cdot u_2(t)^2 = u(t)^2$$
+      $$1 \cdot 1^2 + 3 \cdot 2^2 = 13 \neq 7^2$$
+      Somit ist das Superpositionsprinzip für nichtlineare Systeme nicht erfüllt.
+      <h2>Konstante Terme in der Differentialgleichung</h2>
+      <p>
+        Mit der Differentialgleichung wird das dynamische Verhalten eines Systems beschrieben. Konstante Terme können
+        eliminiert werden, indem man den statischen Systemzustand berechnet und nur die Abweichung von diesem Zustand
+        betrachtet.
+
+        Nehmen wir folgende Differentialgleichung an:
+        $$
+        \frac{d^2 y(t)}{dt^2} + 3 \frac{dy(t)}{dt} + y(t) = 4 u(t) + 5
+        $$
+        Wollen wir den stationären Zustand des Systems bestimmen, so setzen wir die Ableitungen auf null:
+        $$0 + 0 + y_{stat} = 4 u_{stat} + 5$$
+        Mit dieser Gleichung können wir für einen beliebigen stationären Eingang \(u_{stat}\) den stationären
+        Ausgang \(y_{stat}\) berechnen. Die Abweichung von diesem stationären Zustand wird mit Differentialgleichung
+        $$\frac{d^2 y(t)}{dt^2} + 3 \frac{dy(t)}{dt} + y(t) = 4 u(t)$$
+        beschrieben, in der der Konstante Term 5 eliminiert wurde.
+      </p>
+      <h3>Ergänzung: Gewöhnliche lineare Differentialgleichung</h2>
+        <p>
+          Gewöhnliche lineare Differentialgleichungen (ODE - Ordinary Differential Equation) enthalten nur Ableitungen
+          nach einer unabhängigen Variablen, z.B. die Zeit t.
+          Gewöhnliche Differentialgleichung gelten allgemein als linear wenn sie die Form
+          $$f_n(t) \frac{d^n y(t)}{dt^n} + f_{n-1}(t) \frac{d^{n-1} y(t)}{dt^{n-1}} + \dots + f_1(t) \frac{dy(t)}{dt} +
+          f_0(t) y(t) + f(t) = 0$$
+          entsprechen, wobei die Koeffizienten \(f_i(t)\) Funktionen der unabhängigen Variablen t sind und \(f(t)\) eine
+          bekannte Funktion ist. <br>
+          Dies ist wichtig um zu Verstehen, dass lineare Differentialgleichungen dynamischer
+          Systeme durch eine spezielle Klasse der gewöhnlichen linearen Differentialgleichungen beschrieben werden.
+        </p>
+        <h2>Kausalität</h2>
+        Kausalität bedeutet, dass unabhängig vom Verlauf der Eingngsgröße zur Zeit \(t < 0\) für $$u_1(t)=u_2(t)
+          \hspace{1cm} \text{ für } 0 \leq t \leq T$$ $$y_1(t)=y_2(t) \hspace{1cm} \text{ für } 0 \leq t \leq T$$ gilt.
+          Die Kausalität zeigt sich dadurch, dass in der Differentialgleichung die Eingangsgröße u nicht mit höherer
+          Ableitung erscheint als die Ausgangsgröße y. Daraus ergibt sich die Bedingung für die Kausalität linearer
+          Systeme: $$q \leq n$$ <h2>Zeitinvarianz</h2>
+          Ein System reagiert auf eine Erregung (also einen vorgegebenen Verlauf u(t)) immer auf die gleiche Weise. Das
+          heißt unabhängig davon, wann die Erregung auftritt.
+    </article>
+
+    <nav>
+      <a href="/index.html">← Zur Übersicht</a>
+      <a href="/anderer-post/index.html">Nächster Post →</a>
+    </nav>
+
+    <footer>
+      <p>© <span id="year"></span> – Dein Blog</p>
+    </footer>
+  </div>
+
+
+</body>
+<script src="/js/main.js"></script>
+
+</html>
